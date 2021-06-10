@@ -1,7 +1,7 @@
 import Config
 
 # Configuracion general de la aplicacion
-config :Maildirstats,
+config :maildirstats,
   maildir_path: '/var/vmail/policia.rionegro.gov.ar',
   ssh: [
     ip: '10.11.37.213',
@@ -15,10 +15,10 @@ config :mnesia,
   dir: '.mnesia/#{Mix.env()}/#{node()}'
 
 # Configuracion de Scheduler, jobs tipo cron
-config :Maildirstats, Maildirstats.Scheduler, jobs: []
+config :maildirstats, Maildirstats.Scheduler, jobs: []
 
 # Configuracion de la libreria que envia emails
-config :Maildirstats, Maildirstats.Mailer,
+config :maildirstats, Maildirstats.Mailer,
   adapter: Bamboo.SMTPAdapter,
   server: "10.11.37.2",
   hostname: "policia.rionegro.gov.ar",

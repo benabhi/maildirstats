@@ -9,8 +9,8 @@ defmodule Maildirstats.Lib.Ssh do
     - https://github.com/rubencaro/sshex
   """
 
-  @maildir_path Application.fetch_env!(:Maildirstats, :maildir_path)
-  @conndata Application.fetch_env!(:Maildirstats, :ssh)
+  @maildir_path Application.fetch_env!(:maildirstats, :maildir_path)
+  @conndata Application.fetch_env!(:maildirstats, :ssh)
 
   @doc """
   Retorna una lista con los nombres de todos los directorios de la carpeta

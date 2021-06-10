@@ -3,7 +3,7 @@ defmodule Maildirstats.Ssh do
   require Logger
   alias Maildirstats.Lib.Ssh, as: SSHLib
 
-  @conndata Application.fetch_env!(:Maildirstats, :ssh)
+  @conndata Application.fetch_env!(:maildirstats, :ssh)
 
   # Api
 
