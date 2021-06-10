@@ -7,7 +7,7 @@ defmodule Maildirstats.MixProject do
       version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
-      escript: [main_module: Maildirstats.CLI],
+      escript: escript(),
       deps: deps()
     ]
   end
@@ -17,6 +17,12 @@ defmodule Maildirstats.MixProject do
     [
       extra_applications: [:logger],
       mod: {Maildirstats.Application, []}
+    ]
+  end
+
+  def escript do
+    [
+      main_module: Maildirstats.CLI
     ]
   end
 
