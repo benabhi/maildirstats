@@ -1,4 +1,6 @@
 defmodule Maildirstats.Ldap do
+  @moduledoc false
+
   use GenServer
   require Logger
 
@@ -15,6 +17,7 @@ defmodule Maildirstats.Ldap do
 
   @impl true
   def init(_args) do
+    # TODO: Pasar clave y usuario a config
     Logger.debug("[GenServer] LDAP initialized...")
     Paddle.authenticate([cn: "ebox"], "ENRW2AiRbKp.Ta.E")
     {:ok, []}

@@ -1,4 +1,6 @@
 defmodule Maildirstats.Ssh do
+  @moduledoc false
+
   use GenServer
   require Logger
   alias Maildirstats.Lib.Ssh, as: SSHLib

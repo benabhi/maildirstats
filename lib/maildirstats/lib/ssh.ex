@@ -24,9 +24,10 @@ defmodule Maildirstats.Lib.Ssh do
 
     case SSHEx.run(conn, cmd) do
       {:ok, output, 0} ->
-        output
-        |> String.split("\n")
-        |> Enum.reject(&(&1 == ""))
+        {:ok,
+          output
+          |> String.split("\n")
+          |> Enum.reject(&(&1 == ""))}
 
       {:ok, err, _code} ->
         {:error, err}
