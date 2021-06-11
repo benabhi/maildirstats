@@ -28,3 +28,6 @@ Maildirstats-*.tar
 
 # Base de datos (en disco) Nmesia
 /.mnesia
+
+# Binario CLI
+/maildirstats

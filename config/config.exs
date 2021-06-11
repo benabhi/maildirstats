@@ -3,6 +3,11 @@ import Config
 # Configuracion general de la aplicacion
 config :maildirstats,
   maildir_path: '/var/vmail/policia.rionegro.gov.ar',
+  # TODO: ver si se puede ofuscar colocando en una variable de entorno.
+  ldap: [
+    user: "ebox",
+    password: "ENRW2AiRbKp.Ta.E"
+  ],
   ssh: [
     ip: '10.11.37.213',
     user: 'soporte',

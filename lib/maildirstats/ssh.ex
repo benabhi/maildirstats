@@ -3,7 +3,7 @@ defmodule Maildirstats.Ssh do
 
   use GenServer
   require Logger
-  alias Maildirstats.Lib.Ssh, as: SSHLib
+  alias Maildirstats.Ssh.Funcs, as: SSHLib
 
   @conndata Application.fetch_env!(:maildirstats, :ssh)
 
@@ -46,7 +46,8 @@ defmodule Maildirstats.Ssh do
 
   @impl true
   def handle_cast({:size, account}, %{conn: conn} = state) do
-    Maildirstats.Memory.add(SSHLib.maildir_size(conn, account))
+    {:ok, size} = SSHLib.maildir_size(conn, account)
+    Maildirstats.Memory.add({account, size})
     {:noreply, state}
   end
 end

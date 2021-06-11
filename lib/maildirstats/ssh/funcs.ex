@@ -1,4 +1,4 @@
-defmodule Maildirstats.Lib.Ssh do
+defmodule Maildirstats.Ssh.Funcs do
   @moduledoc """
   Funciones diversas para obtener informacion mediante SSH de las carpetas de
   correos de usuarios ubicadas en `maildir_path` (ver config).
