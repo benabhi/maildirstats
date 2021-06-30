@@ -28,8 +28,8 @@ defmodule Maildirstats.Scheduler.Handler do
   @spec parse_job(job :: atom()) :: Quantum.Job.t()
   def parse_job(job) do
     Maildirstats.Scheduler.new_job()
-      |> Quantum.Job.set_name(job.name())
-      |> Quantum.Job.set_schedule(~e[#{job.schedule()}])
-      |> Quantum.Job.set_task(job.task())
+    |> Quantum.Job.set_name(job.name())
+    |> Quantum.Job.set_schedule(~e[#{job.schedule()}])
+    |> Quantum.Job.set_task(job.task())
   end
 end

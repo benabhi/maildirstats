@@ -15,6 +15,11 @@ config :maildirstats,
     negotiation_timeout: :infinity
   ]
 
+# Configuracion de Logger
+# NOTE: Para ver mas niveles de log, ver documentacion oficial
+#         - https://hexdocs.pm/logger/1.12/Logger.html
+config :logger, level: :info
+
 # Configuracion de base de datos en disco
 config :mnesia,
   dir: '.mnesia/#{Mix.env()}/#{node()}'

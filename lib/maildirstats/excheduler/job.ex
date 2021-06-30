@@ -15,5 +15,5 @@ defmodule Maildirstats.Scheduler.Job do
 
   Debe retornar una funcion anonima, que esta a su vez, retorne :ok
   """
-  @callback task() :: (-> :ok)
+  @callback task() :: (() -> :ok)
 end

@@ -13,23 +13,23 @@ defmodule Maildirstats.Ssh do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
-  def call_list() do
+  def list() do
     GenServer.call(__MODULE__, :list)
   end
 
-  def call_size(account) do
+  def size(account) do
     GenServer.call(__MODULE__, {:size, account}, :infinity)
   end
 
-  def cast_size(account) do
-    GenServer.cast(__MODULE__, {:size, account})
+  def stats(account) do
+    GenServer.cast(__MODULE__, {:stats, account})
   end
 
   # GenServer Callbacks
 
   @impl true
   def init(_opts) do
-    Logger.debug("[GenServer] SSHProc initialized... connected to #{@conndata[:ip]}")
+    Logger.debug("[GenServer] SSH initialized... connected to #{@conndata[:ip]}")
     {:ok, conn} = SSHLib.conn()
     {:ok, %{conn: conn}}
   end
@@ -45,9 +45,16 @@ defmodule Maildirstats.Ssh do
   end
 
   @impl true
-  def handle_cast({:size, account}, %{conn: conn} = state) do
-    {:ok, size} = SSHLib.maildir_size(conn, account)
-    Maildirstats.Memory.add({account, size})
+  def handle_cast({:stats, account}, %{conn: conn} = state) do
+    case SSHLib.maildir_stats(conn, account) do
+      {:ok, stats} ->
+        Maildirstats.Memory.add(stats)
+
+      {:error, msg} ->
+        msg
+        # TODO: Maildirstats.Logger.add({date, msg})
+    end
+
     {:noreply, state}
   end
 end

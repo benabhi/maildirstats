@@ -14,19 +14,6 @@ defmodule Maildirstats.Scheduler.Job.FetchDirsData do
   def schedule(), do: "* * * * *"
 
   @impl Job
-  def task() do
-    fn ->
-
-      Maildirstats.Memory.clear()
-
-      {:ok, dirs} = Maildirstats.Ssh.call_list()
-
-      dirs
-      |> Enum.map(&Task.async(fn -> Maildirstats.Ssh.cast_size(&1) end))
-      |> Enum.map(&Task.await(&1, :infinity))
-
-      :ok
-    end
-  end
-
+  # def task(), do: fn -> Maildirstats.fetch() end
+  def task(), do: fn -> nil end
 end

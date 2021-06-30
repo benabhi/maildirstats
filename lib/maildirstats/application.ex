@@ -5,7 +5,6 @@ defmodule Maildirstats.Application do
 
   @impl true
   def start(_type, _args) do
-
     before_initialization_stuff()
 
     children = [
@@ -16,7 +15,7 @@ defmodule Maildirstats.Application do
       # NOTE: Este es un proceso que corre y muere luego de inicializar todos
       #       los demas procesos de la aplicacion para correr tareas de inicia-
       #       lizacion.
-      {Task, fn -> after_initialization_stuff() end},
+      {Task, fn -> after_initialization_stuff() end}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -33,8 +32,8 @@ defmodule Maildirstats.Application do
 
   # Colocar aqui tareas para ejecutar despues de inicializar la app
   defp after_initialization_stuff() do
-     # Incializamos taras automatizadas (cron)
-     jobs = [
+    # Incializamos taras automatizadas (cron)
+    jobs = [
       Maildirstats.Scheduler.Job.FetchDirsData
     ]
 

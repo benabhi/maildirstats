@@ -14,6 +14,6 @@ defmodule Maildirstats.Mnesia.Schema do
     Memento.start()
 
     # Creamos las copias en disco de las tablas
-    Memento.Table.create(Table.Dirs, disc_copies: nodes)
+    Memento.Table.create(Table.Maildir, disc_copies: nodes)
   end
 end

@@ -4,6 +4,8 @@ defmodule Maildirstats.Ldap do
   use GenServer
   require Logger
 
+  @ldap_credentials Application.fetch_env!(:maildirstats, :ldap)
+
   # Api
   def start_link(_args) do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
@@ -19,14 +21,21 @@ defmodule Maildirstats.Ldap do
   def init(_args) do
     # TODO: Pasar clave y usuario a config
     Logger.debug("[GenServer] LDAP initialized...")
-    Paddle.authenticate([cn: "ebox"], "ENRW2AiRbKp.Ta.E")
+    [user: user, password: password] = @ldap_credentials
+    Paddle.authenticate([cn: user], password)
     {:ok, []}
   end
 
   @impl true
   def handle_call({:userdetails, user}, _from, state) do
-    {:ok, [userdata]} = Paddle.get(filter: [uid: user], base: [ou: "Users"])
+    case Paddle.get(filter: [uid: user], base: [ou: "Users"]) do
+      {:ok, [userdata]} ->
+        Paddle.get(filter: [uid: user], base: [ou: "Users"])
+        {:reply, {:ok, userdata}, state}
 
-    {:reply, userdata, state}
+      {:error, reason} ->
+        IO.inspect(reason)
+        {:reply, {:error, reason}, state}
+    end
   end
 end
