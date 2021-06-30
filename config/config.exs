@@ -13,7 +13,11 @@ config :maildirstats,
     user: 'soporte',
     password: 'soporte',
     negotiation_timeout: :infinity
-  ]
+  ],
+  # Destinatario/s de los emails de reportes
+  mail_recipients: [
+    'hdjalabert@policia.rionegro.gov.ar'
+  ],
 
 # Configuracion de Logger
 # NOTE: Para ver mas niveles de log, ver documentacion oficial
