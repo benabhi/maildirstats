@@ -16,7 +16,7 @@ config :maildirstats,
   ],
   # Destinatario/s de los emails de reportes
   mail_recipients: [
-    'hdjalabert@policia.rionegro.gov.ar'
+    "hdjalabert@policia.rionegro.gov.ar"
   ]
 
 # Configuracion de Logger

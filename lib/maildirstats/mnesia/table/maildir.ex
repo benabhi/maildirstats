@@ -15,9 +15,9 @@ defmodule Maildirstats.Mnesia.Table.Maildir do
       end
     end
 
-    def write() do
+    def write(maildir_data) do
       Memento.transaction! fn ->
-          # TODO
+          Memento.Query.write(maildir_data)
       end
     end
   end
