@@ -11,9 +11,11 @@ defmodule Maildirstats.Scheduler.Job.FetchDirsData do
   def name(), do: :fetchdirsdata
 
   @impl Job
-  def schedule(), do: "* * * * *"
+  def schedule(), do: "50 09 * * *"
 
   @impl Job
-  # def task(), do: fn -> Maildirstats.fetch() end
-  def task(), do: fn -> nil end
+  def task(), do: fn ->
+    Maildirstats.Memory.clear()
+    Maildirstats.fetch_dirs()
+  end
 end

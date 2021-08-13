@@ -48,11 +48,17 @@ defmodule Maildirstats.Ssh do
   def handle_cast({:stats, account}, %{conn: conn} = state) do
     case SSHLib.maildir_stats(conn, account) do
       {:ok, stats} ->
-        Maildirstats.Memory.add(stats)
+        case Maildirstats.Ldap.get_user_details(account) do
+          {:ok, ldap_data} ->
+            stats = %{stats | ldap: ldap_data}
+            Maildirstats.Memory.add(stats)
+          {:error, msg} ->
+            Maildirstats.Memory.add(stats)
+            Maildirstats.Logger.log({:warning, :ldap, {account, msg}})
+        end
 
       {:error, msg} ->
-        msg
-        # TODO: Maildirstats.Logger.add({date, msg})
+        Maildirstats.Logger.log({:error, :ssh, msg})
     end
 
     {:noreply, state}

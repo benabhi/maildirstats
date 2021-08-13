@@ -4,8 +4,6 @@ defmodule Maildirstats do
   """
 
   def fetch_dirs() do
-    Maildirstats.Memory.clear()
-
     {:ok, dirs} = Maildirstats.Ssh.list()
 
     dirs

@@ -10,6 +10,7 @@ defmodule Maildirstats.Application do
     children = [
       Maildirstats.Scheduler,
       Maildirstats.Memory,
+      Maildirstats.Logger,
       Maildirstats.Ssh,
       Maildirstats.Ldap,
       # NOTE: Este es un proceso que corre y muere luego de inicializar todos
@@ -34,7 +35,8 @@ defmodule Maildirstats.Application do
   defp after_initialization_stuff() do
     # Incializamos taras automatizadas (cron)
     jobs = [
-      Maildirstats.Scheduler.Job.FetchDirsData
+      Maildirstats.Scheduler.Job.FetchDirsData,
+      Maildirstats.Scheduler.Job.SaveData
     ]
 
     Maildirstats.Scheduler.Handler.add_multiple_jobs(jobs)

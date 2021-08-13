@@ -22,14 +22,19 @@ config :maildirstats,
 # Configuracion de Logger
 # NOTE: Para ver mas niveles de log, ver documentacion oficial
 #         - https://hexdocs.pm/logger/1.12/Logger.html
-config :logger, level: :info
+#config :logger, level: :info
+
+# Configuraciones varias de elixir
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
 # Configuracion de base de datos en disco
 config :mnesia,
   dir: '.mnesia/#{Mix.env()}/#{node()}'
 
 # Configuracion de Scheduler, jobs tipo cron
-config :maildirstats, Maildirstats.Scheduler, jobs: []
+config :maildirstats, Maildirstats.Scheduler,
+  timezone: "America/Argentina/Ushuaia",
+  jobs: []
 
 # Configuracion de la libreria que envia emails
 config :maildirstats, Maildirstats.Mailer,

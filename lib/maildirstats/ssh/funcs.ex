@@ -104,7 +104,7 @@ defmodule Maildirstats.Ssh.Funcs do
 
   TODO: Ejemplos, doctests?
   """
-  @spec maildir_stats(conn :: pid(), dir :: String.t()) :: {:ok, %Maildir{}}
+  @spec maildir_stats(conn :: pid(), dir :: String.t()) :: {:ok, %Maildir{}} | {:error, String.t()}
   def maildir_stats(conn, dir) do
     path = Path.join(@maildir_path, dir)
 

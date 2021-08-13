@@ -34,7 +34,6 @@ defmodule Maildirstats.Ldap do
         {:reply, {:ok, userdata}, state}
 
       {:error, reason} ->
-        IO.inspect(reason)
         {:reply, {:error, reason}, state}
     end
   end
