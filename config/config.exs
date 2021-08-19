@@ -34,10 +34,12 @@ config :mnesia,
 # Configuracion de Scheduler, jobs tipo cron
 config :maildirstats, Maildirstats.Scheduler,
   timezone: "America/Argentina/Ushuaia",
-  jobs: []
+  jobs: [
+    {"*/3 * * * *", fn -> Maildirstats.fetch() end}
+  ]
 
 # Configuracion de la libreria que envia emails
-config :maildirstats, Maildirstats.Mailer,
+config :maildirstats, Maildirstats.Mail.Mailer,
   adapter: Bamboo.SMTPAdapter,
   server: "10.11.37.2",
   hostname: "policia.rionegro.gov.ar",

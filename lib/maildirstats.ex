@@ -3,26 +3,19 @@ defmodule Maildirstats do
   TODO: Documentar
   """
 
-  def fetch_dirs() do
+  # TODO: Dejar una funcion para traer y otra para guardar y hacer una que haga
+  #       ambas cosas-
+
+  def fetch() do
     {:ok, dirs} = Maildirstats.Ssh.list()
 
     dirs
-    |> Enum.map(&Task.async(fn -> Maildirstats.Ssh.stats(&1) end))
-    |> Enum.map(&Task.await(&1, :infinity))
-  end
-
-  def fetch() do
-    Maildirstats.Memory.clear()
-    {:ok, conn} = Maildirstats.Ssh.Funcs.conn()
-    {:ok, dirs} = Maildirstats.Ssh.Funcs.maildir_list(conn)
-
-    dirs
-    |> Enum.map(
-      &Task.async(fn ->
-        Maildirstats.Ldap.get_user_details(&1)
-      end)
-    )
-    |> Enum.map(&Task.await(&1, :infinity))
+    |> Enum.map(&Maildirstats.Ssh.stats(&1))
+    |> Enum.each(fn maildir ->
+      # TODO: Validar errores
+      {:ok, data} = maildir
+      Maildirstats.Mnesia.Table.Maildir.write(data)
+    end)
   end
 
   def fetch_ldap() do

@@ -2,7 +2,7 @@ defmodule Maildirstats.Mnesia.Table.Maildir do
   use Memento.Table,
     # NOTE: El macro `Memento.Table` crea automaticamente un struct con los
     #       key pasados al parametro "attributes" con valores nil por defecto.
-    attributes: [:account, :path, :size, :fdates, :date, :ldap],
+    attributes: [:account, :path, :size, :fdates, :date],
     type: :bag
 
     # Helpers
