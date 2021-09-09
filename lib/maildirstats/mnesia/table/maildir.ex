@@ -2,7 +2,7 @@ defmodule Maildirstats.Mnesia.Table.Maildir do
   use Memento.Table,
     # NOTE: El macro `Memento.Table` crea automaticamente un struct con los
     #       key pasados al parametro "attributes" con valores nil por defecto.
-    attributes: [:account, :path, :size, :fdates, :date],
+    attributes: [:account, :path, :size, :fdates, :fcount, :date],
     type: :bag
 
     # Helpers
@@ -11,7 +11,7 @@ defmodule Maildirstats.Mnesia.Table.Maildir do
     Shortcut/Wrapper de la libreria `Memento` que muestra todos los registros de
     la tabla.
     """
-    def all() do
+    def find_all() do
       Memento.transaction! fn ->
         Memento.Query.all(__MODULE__)
       end
@@ -21,18 +21,17 @@ defmodule Maildirstats.Mnesia.Table.Maildir do
     Shortcut/Wrapper de la libreria `Memento` que muestra un registro
     determinado de la tabla.
     """
-    def read(_maildir_data) do
-      :nil
-    #  Memento.transaction! fn ->
-          # TODO: Implementar logica
-    #  end
+    def find(account) do
+      Memento.transaction! fn ->
+        Memento.Query.select(__MODULE__, {:==, :account, account})
+      end
     end
 
     @doc """
     Shortcut/Wrapper de la libreria `Memento` que escribe un nuevo registro
     en la base de datos.
     """
-    def write(maildir_data) do
+    def save(maildir_data) do
       Memento.transaction! fn ->
           Memento.Query.write(maildir_data)
       end

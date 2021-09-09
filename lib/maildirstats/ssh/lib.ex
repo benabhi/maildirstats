@@ -45,7 +45,7 @@ defmodule Maildirstats.Ssh.Lib do
   @spec maildir_size(conn :: pid(), dir :: String.t()) :: {:ok, FileSize.t()} | {:error, String.t()}
   def maildir_size(conn, dir) do
     path = Path.join(@maildir_path, dir)
-    cmd = 'du -s #{path}'
+    cmd = 'du -sb #{path}'
 
     case SSHEx.run(conn, cmd) do
       {:ok, output, 0} ->
@@ -93,6 +93,30 @@ defmodule Maildirstats.Ssh.Lib do
   end
 
   @doc """
+  Retorna el numero de archivos que tiene la carpeta de email, TODOS y de forma
+  recursiva.
+
+  TODO: Ejemplos, doctests?
+  """
+  @spec maildir_countfiles(conn :: pid(), dir :: String.t()) :: {:ok, integer()} | {:error, String.t()}
+  def maildir_countfiles(conn, dir) do
+    path = Path.join(@maildir_path, dir)
+    cmd = 'find #{path} -type f | wc -l'
+
+    case SSHEx.run(conn, cmd) do
+      {:ok, output, 0} ->
+        {:ok,
+        output
+        |> String.trim()
+        |> String.to_integer()}
+      {:ok, err, _code} ->
+        {:error, err}
+    end
+
+  end
+
+
+  @doc """
   Retorna un diccionario con los datos de la carpeta buscada.
 
   Los valores obtenidos son los siguientes:
@@ -100,6 +124,7 @@ defmodule Maildirstats.Ssh.Lib do
     * `path`: Path absoluto a la carpeta
     * `size`: Tañao de la carpeta en bytes
     * `fdates`: Tupla de 3 items, {acceso, modificacion, creacion},
+    * `fcount`: Cantidad total de archivos en la carpeta (recursivo)
     * `date`: Fecha y hora en la que fue solicitada la informacion
 
   TODO: Ejemplos, doctests?
@@ -109,13 +134,15 @@ defmodule Maildirstats.Ssh.Lib do
     path = Path.join(@maildir_path, dir)
 
     with {:ok, size} <- maildir_size(conn, dir),
-         {:ok, {atime, mtime, ctime}} <- maildir_dates(conn, dir) do
+         {:ok, {atime, mtime, ctime}} <- maildir_dates(conn, dir),
+         {:ok, count} <- maildir_countfiles(conn, dir) do
       {:ok,
        %Maildir{
          account: dir,
          path: path,
          size: size,
          fdates: {atime, mtime, ctime},
+         fcount: count,
          date: Timex.now()
        }}
     else

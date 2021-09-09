@@ -1,88 +1,88 @@
 defmodule Maildirstats.CLI do
-  def main(argv) do
-    arguments =
-      Optimus.new!(
-        name: "statcalc",
-        description: "Estadisticas de espacio de emails.",
-        version: "0.1.0",
-        author: "Hernan Jalabert <benabhi@gmail.com>",
-        about:
-          "Utilidad para obtener diversa informacion y estadisticas con respecto al peso de las carpetas de emails de Policia de Rio Negro.",
-        allow_unknown_args: false,
-        parse_double_dash: true,
-        args: [
-          infile: [
-            value_name: "INPUT_FILE",
-            help: "File with raw data",
-            required: true,
-            parser: :string
-          ],
-          outfile: [
-            value_name: "OUTPUT_FILE",
-            help: "File to write statistics to",
-            required: false,
-            parser: :string
-          ]
-        ],
-        flags: [
-          print_header: [
-            short: "-h",
-            long: "--print-header",
-            help: "Specifies wheather to print header before the outputs",
-            multiple: false
-          ],
-          verbosity: [
-            short: "-v",
-            help: "Verbosity level",
-            multiple: true
-          ]
-        ],
-        options: [
-          date_from: [
-            value_name: "DATE_FROM",
-            short: "-f",
-            long: "--from",
-            help: "Start date for the period",
-            parser: fn s ->
-              case Date.from_iso8601(s) do
-                {:error, _} -> {:error, "invalid date"}
-                {:ok, _} = ok -> ok
-              end
-            end,
-            required: true
-          ],
-          date_to: [
-            value_name: "DATE_TO",
-            short: "-t",
-            long: "--to",
-            help: "End date for the period",
-            parser: fn s ->
-              case Date.from_iso8601(s) do
-                {:error, _} -> {:error, "invalid date"}
-                {:ok, _} = ok -> ok
-              end
-            end,
-            required: false,
-            default: &Date.utc_today/0
-          ]
-        ],
-        subcommands: [
-          validate: [
-            name: "validate",
-            about: "Validates the raw contents of a file",
-            args: [
-              file: [
-                value_name: "FILE",
-                help: "File with raw data to validate",
-                required: true,
-                parser: :string
-              ]
-            ]
-          ]
-        ]
-      )
-      |> Optimus.parse!(argv)
+  #alias Maildirstats.CLI.Account
 
-    IO.inspect(arguments)
+  def main(argv) do
+    argv                # Argumentos crudos
+    |> parse_args()     # Parseamos los argumentos
+    |> parse_command()  # Pattern matching para ejecutar el comando
+  end
+
+  # NOTE: Nos aseguramos que solo haya un parametro
+  #def parse_command(%{flags: %{daily: d, monthly: m, yearly: y}})  do
+    # Contamos cuantos "true" tiene el array
+  #  if(Enum.count([d, m, y], &(&1 == true)) > 1) do
+  #    IO.puts("Solo se puede tener un parámetro activo -d | -m | -y")
+  #  end
+  #end
+
+  def parse_command(%{options: %{account: account}, flags: %{daily: true}}) do
+    # TODO
+  end
+
+  defp parse_args(argv) do
+    Optimus.new!(
+      name: "maildirsize",
+      description: "Reportes y Estadística de cuentas y directorios de casillas de correos",
+      version: "0.0.1",
+      author: "Hernán Jalabert <benabhi@gmail.com>",
+      about: "Utilidad que genera reportes y estadísticas de cuentas y directorios de casillas de correos",
+      allow_unknown_args: false,
+      parse_double_dash: true,
+      options: [
+        account: [
+          value_name: "ACCOUNT",
+          short: "-a",
+          long: "--account",
+          help: "Cuenta especifica a buscar",
+          parser: :string,
+          required: false
+        ],
+        max: [
+          value_name: "MAX",
+          short: "-M",
+          long: "--max",
+          help: "Cantidad maxima de registros a listar",
+          parser: :integer,
+          default: 10,
+          required: false
+        ],
+        # TODO: Ver como parsear fechas
+        interval: [
+          value_name: "INTERVAL",
+          short: "-i",
+          long: "--interval",
+          help: "Intervalo de fechas para buscar registros",
+          parser: :integer,
+          #default: 10,
+          required: false
+        ]
+      ],
+      flags: [
+        daily: [
+          short: "-d",
+          long: "--daily",
+          help: "Registros diarios",
+          multiple: false,
+        ],
+        monthly: [
+          short: "-m",
+          long: "--monthly",
+          help: "Registros Mensuales (defecto)",
+          multiple: false,
+        ],
+        yearly: [
+          short: "-y",
+          long: "--yearly",
+          help: "Registros Anuales",
+          multiple: false,
+        ],
+        direct: [
+          short: "-D",
+          long: "--direct",
+          help: "Fuerza la busqueda directa, no lo guardado en base de datos",
+          multiple: false,
+        ]
+      ]
+    ) |> Optimus.parse!(argv)
   end
 end

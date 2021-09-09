@@ -22,7 +22,7 @@ config :maildirstats,
 # Configuracion de Logger
 # NOTE: Para ver mas niveles de log, ver documentacion oficial
 #         - https://hexdocs.pm/logger/1.12/Logger.html
-#config :logger, level: :info
+config :logger, level: :error
 
 # Configuraciones varias de elixir
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
@@ -35,7 +35,8 @@ config :mnesia,
 config :maildirstats, Maildirstats.Scheduler,
   timezone: "America/Argentina/Ushuaia",
   jobs: [
-    {"*/3 * * * *", fn -> Maildirstats.fetch() end}
+    # {"@daily", fn -> Maildirstats.fetch_and_persist() end}
+    # {"@monthly", fn -> Maildirstats.Mail.send_report() end}
   ]
 
 # Configuracion de la libreria que envia emails
@@ -45,7 +46,7 @@ config :maildirstats, Maildirstats.Mail.Mailer,
   hostname: "policia.rionegro.gov.ar",
   port: 25,
   username: "hdjalabert@policia.rionegro.gov.ar",
-  password: "31860933",
+  password: "31860933Ya",
   tls: :never,
   ssl: false,
   retries: 1,
@@ -62,3 +63,8 @@ config :paddle, Paddle,
   tcpopts: [],
   timeout: 3000,
   account_subdn: "ou=Users"
+
+# Configuracion de delimitadores y separadores para numeros utilizados por la
+# libreria FileSize
+config :number,
+  delimit: [delimiter: ".", separator: ","]

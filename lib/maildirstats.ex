@@ -3,26 +3,27 @@ defmodule Maildirstats do
   TODO: Documentar
   """
 
-  # TODO: Dejar una funcion para traer y otra para guardar y hacer una que haga
-  #       ambas cosas-
-
   def fetch() do
-    {:ok, dirs} = Maildirstats.Ssh.list()
+    case Maildirstats.Ssh.list() do
+      {:ok, dirs} ->
+        dirs
+        |> Enum.map(&Maildirstats.Ssh.stats(&1))
+      {:error, error} ->
+        Maildirstats.Logger.log({:error, :ssh, error})
+    end
+  end
 
-    dirs
-    |> Enum.map(&Maildirstats.Ssh.stats(&1))
+  def persist(data) do
+    data
     |> Enum.each(fn maildir ->
-      # TODO: Validar errores
-      {:ok, data} = maildir
-      Maildirstats.Mnesia.Table.Maildir.write(data)
+      case maildir do
+        {:ok, data} ->
+          Maildirstats.Mnesia.Table.Maildir.save(data)
+        {:error, error} ->
+          Maildirstats.Logger.log({:error, :ssh, error})
+      end
     end)
   end
 
-  def fetch_ldap() do
-    # TODO
-  end
-
-  def save() do
-    # TODO
-  end
+  def fetch_and_persist(), do:  persist(fetch())
 end

@@ -38,7 +38,8 @@ defmodule Maildirstats.MixProject do
       {:bamboo_smtp, "~> 4.0.1"},
       {:paddle, "~> 0.1.0"},
       {:file_size, "~> 3.0"},
-      {:tzdata, "~> 1.1"}
+      {:sneeze, "~> 1.2"},
+      {:tzdata, "~> 0.1.8", override: true}
     ]
   end
 end

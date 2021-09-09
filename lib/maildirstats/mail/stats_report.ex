@@ -6,8 +6,9 @@ defmodule Maildirstats.Mail.StatsReport do
       to: "hdjalabert@policia.rionegro.gov.ar",
       from: "maildirstats",
       subject: "Estadisticas de directorios de emails.",
-      html_body: "",
-      text_body: "Aca va el reporte"
+      html_body: "<h1>Aca el reporte</h1>",
+      text_body: ""
     )
+    |> Maildirstats.Mail.Mailer.deliver_now!()
   end
 end
