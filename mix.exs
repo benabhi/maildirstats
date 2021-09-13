@@ -39,7 +39,8 @@ defmodule Maildirstats.MixProject do
       {:paddle, "~> 0.1.0"},
       {:file_size, "~> 3.0"},
       {:sneeze, "~> 1.2"},
-      {:tzdata, "~> 0.1.8", override: true}
+      {:tzdata, "~> 0.1.8", override: true},
+      {:scribe, "~> 0.10"}
     ]
   end
 end

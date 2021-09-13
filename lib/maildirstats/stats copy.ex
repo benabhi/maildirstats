@@ -1,7 +1,5 @@
 defmodule Maildirstats.Stats2 do
 
-  import Maildirstats.Utils, only: [interval: 2]
-
 
 
   def daily(data) do

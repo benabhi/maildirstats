@@ -1,6 +1,5 @@
 defmodule Maildirstats.Stats do
 
-
   defp calculate_size_variation(data) do
     data = data
     |> Enum.reverse()
@@ -28,9 +27,9 @@ defmodule Maildirstats.Stats do
     # 3. Remueve los dias duplicados
     # 4. Retorna una lista de tuplas con fecha y peso
     data
-    |> Enum.sort(& (Timex.compare(&1.date, &2.date) == 1))
+    |> Enum.sort(& (Timex.compare(&1.date, &2.date) == -1))
     |> Enum.uniq_by(&(Timex.to_date(&1.date)))
-    #|> Enum.map(&({&1.date, &1.size, &1}))
+    |> Enum.map(&({&1.date, &1.size, &1}))
   end
 
   # Helpers
