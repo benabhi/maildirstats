@@ -7,7 +7,12 @@ defmodule Maildirstats do
     case Maildirstats.Ssh.list() do
       {:ok, dirs} ->
         dirs
+        #|> Enum.reject(fn dir ->
+        #  <<first3chars :: binary-size(3)>> <> _rest = dir
+        #  first3chars == "bkp"
+        #end)
         |> Enum.map(&Maildirstats.Ssh.stats(&1))
+
       {:error, error} ->
         Maildirstats.Logger.log({:error, :ssh, error})
     end
@@ -19,11 +24,12 @@ defmodule Maildirstats do
       case maildir do
         {:ok, data} ->
           Maildirstats.Mnesia.Table.Maildir.save(data)
+
         {:error, error} ->
           Maildirstats.Logger.log({:error, :ssh, error})
       end
     end)
   end
 
-  def fetch_and_persist(), do:  persist(fetch())
+  def fetch_and_persist(), do: persist(fetch())
 end

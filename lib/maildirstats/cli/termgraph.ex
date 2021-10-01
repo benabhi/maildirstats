@@ -1,10 +1,10 @@
 defmodule Maildirstats.CLI.Termgraph do
-
   def execute(data) do
     data = parse_data(data)
+
     ~s(script --return --quiet -c "echo -e \\"#{data}\\" | termgraph" /dev/null)
     |> String.to_charlist()
-    |> :os.cmd
+    |> :os.cmd()
   end
 
   def parse_data(data) do

@@ -1,7 +1,7 @@
 defmodule Maildirstats.CLI.Account do
-  #alias Maildirstats.Ldap
+  # alias Maildirstats.Ldap
   alias Maildirstats.Ssh
-  #alias Maildirstats.Mnesia.Table.Maildir
+  # alias Maildirstats.Mnesia.Table.Maildir
 
   def get_details(account, options \\ []) do
     default = [ldap: false, direct: false]
@@ -16,6 +16,4 @@ defmodule Maildirstats.CLI.Account do
       fdates: data.fdates
     }
   end
-
-
 end

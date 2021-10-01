@@ -19,7 +19,6 @@ defmodule Maildirstats.Ldap do
 
   @impl true
   def init(_args) do
-    # TODO: Pasar clave y usuario a config
     Logger.debug("[GenServer] LDAP initialized...")
     [user: user, password: password] = @ldap_credentials
     Paddle.authenticate([cn: user], password)

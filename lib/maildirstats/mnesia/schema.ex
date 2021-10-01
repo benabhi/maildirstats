@@ -1,5 +1,6 @@
 defmodule Maildirstats.Mnesia.Schema do
   alias Maildirstats.Mnesia.Table
+
   @doc """
   TODO: Documentar
   """

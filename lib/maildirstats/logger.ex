@@ -9,7 +9,7 @@ defmodule Maildirstats.Logger do
 
   def log({error_level, service, msg}) when is_atom(error_level) and is_atom(service) do
     log = [{Timex.now(), error_level, service, msg}]
-    Agent.update(__MODULE__, &( &1 ++ log ))
+    Agent.update(__MODULE__, &(&1 ++ log))
   end
 
   def get() do

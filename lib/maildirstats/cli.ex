@@ -1,19 +1,22 @@
 defmodule Maildirstats.CLI do
-  #alias Maildirstats.CLI.Account
+  # alias Maildirstats.CLI.Account
 
   def main(argv) do
-    argv                # Argumentos crudos
-    |> parse_args()     # Parseamos los argumentos
-    |> parse_command()  # Pattern matching para ejecutar el comando
+    # Argumentos crudos
+    argv
+    # Parseamos los argumentos
+    |> parse_args()
+    # Pattern matching para ejecutar el comando
+    |> parse_command()
   end
 
   # NOTE: Nos aseguramos que solo haya un parametro
-  #def parse_command(%{flags: %{daily: d, monthly: m, yearly: y}})  do
-    # Contamos cuantos "true" tiene el array
+  # def parse_command(%{flags: %{daily: d, monthly: m, yearly: y}})  do
+  # Contamos cuantos "true" tiene el array
   #  if(Enum.count([d, m, y], &(&1 == true)) > 1) do
   #    IO.puts("Solo se puede tener un parámetro activo -d | -m | -y")
   #  end
-  #end
+  # end
 
   def parse_command(%{options: %{account: account}, flags: %{daily: true}}) do
     # TODO
@@ -25,7 +28,8 @@ defmodule Maildirstats.CLI do
       description: "Reportes y Estadística de cuentas y directorios de casillas de correos",
       version: "0.0.1",
       author: "Hernán Jalabert <benabhi@gmail.com>",
-      about: "Utilidad que genera reportes y estadísticas de cuentas y directorios de casillas de correos",
+      about:
+        "Utilidad que genera reportes y estadísticas de cuentas y directorios de casillas de correos",
       allow_unknown_args: false,
       parse_double_dash: true,
       options: [
@@ -53,7 +57,7 @@ defmodule Maildirstats.CLI do
           long: "--interval",
           help: "Intervalo de fechas para buscar registros",
           parser: :integer,
-          #default: 10,
+          # default: 10,
           required: false
         ]
       ],
@@ -62,27 +66,28 @@ defmodule Maildirstats.CLI do
           short: "-d",
           long: "--daily",
           help: "Registros diarios",
-          multiple: false,
+          multiple: false
         ],
         monthly: [
           short: "-m",
           long: "--monthly",
           help: "Registros Mensuales (defecto)",
-          multiple: false,
+          multiple: false
         ],
         yearly: [
           short: "-y",
           long: "--yearly",
           help: "Registros Anuales",
-          multiple: false,
+          multiple: false
         ],
         direct: [
           short: "-D",
           long: "--direct",
           help: "Fuerza la busqueda directa, no lo guardado en base de datos",
-          multiple: false,
+          multiple: false
         ]
       ]
-    ) |> Optimus.parse!(argv)
+    )
+    |> Optimus.parse!(argv)
   end
 end

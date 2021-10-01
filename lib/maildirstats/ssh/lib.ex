@@ -13,6 +13,7 @@ defmodule Maildirstats.Ssh.Lib do
 
   @maildir_path Application.fetch_env!(:maildirstats, :maildir_path)
   @conndata Application.fetch_env!(:maildirstats, :ssh)
+  @timeouts [channel_timeou: :infinity, exec_timeout: :infinity]
 
   @doc """
   Retorna una lista con los nombres de todos los directorios de la carpeta
@@ -24,7 +25,7 @@ defmodule Maildirstats.Ssh.Lib do
   def maildir_list(conn) do
     cmd = 'ls #{@maildir_path}'
 
-    case SSHEx.run(conn, cmd) do
+    case SSHEx.run(conn, cmd, @timeouts) do
       {:ok, output, 0} ->
         {:ok,
          output
@@ -42,12 +43,13 @@ defmodule Maildirstats.Ssh.Lib do
 
   TODO: Ejemplos, doctests?
   """
-  @spec maildir_size(conn :: pid(), dir :: String.t()) :: {:ok, FileSize.t()} | {:error, String.t()}
+  @spec maildir_size(conn :: pid(), dir :: String.t()) ::
+          {:ok, FileSize.t()} | {:error, String.t()}
   def maildir_size(conn, dir) do
     path = Path.join(@maildir_path, dir)
     cmd = 'du -sb #{path}'
 
-    case SSHEx.run(conn, cmd) do
+    case SSHEx.run(conn, cmd, @timeouts) do
       {:ok, output, 0} ->
         {:ok,
          output
@@ -74,7 +76,7 @@ defmodule Maildirstats.Ssh.Lib do
     path = Path.join(@maildir_path, dir)
     cmd = 'stat --format=\'%X,%Y,%Z\' #{path}'
 
-    case SSHEx.run(conn, cmd) do
+    case SSHEx.run(conn, cmd, @timeouts) do
       {:ok, output, 0} ->
         {:ok,
          output
@@ -82,9 +84,9 @@ defmodule Maildirstats.Ssh.Lib do
          |> String.split(",")
          |> Enum.map(fn date ->
            date
-           |> String.to_integer
-           |> Timex.from_unix
-          end)
+           |> String.to_integer()
+           |> Timex.from_unix()
+         end)
          |> List.to_tuple()}
 
       {:ok, err, _code} ->
@@ -98,23 +100,23 @@ defmodule Maildirstats.Ssh.Lib do
 
   TODO: Ejemplos, doctests?
   """
-  @spec maildir_countfiles(conn :: pid(), dir :: String.t()) :: {:ok, integer()} | {:error, String.t()}
+  @spec maildir_countfiles(conn :: pid(), dir :: String.t()) ::
+          {:ok, integer()} | {:error, String.t()}
   def maildir_countfiles(conn, dir) do
     path = Path.join(@maildir_path, dir)
     cmd = 'find #{path} -type f | wc -l'
 
-    case SSHEx.run(conn, cmd) do
+    case SSHEx.run(conn, cmd, @timeouts) do
       {:ok, output, 0} ->
         {:ok,
-        output
-        |> String.trim()
-        |> String.to_integer()}
+         output
+         |> String.trim()
+         |> String.to_integer()}
+
       {:ok, err, _code} ->
         {:error, err}
     end
-
   end
-
 
   @doc """
   Retorna un diccionario con los datos de la carpeta buscada.
@@ -129,7 +131,8 @@ defmodule Maildirstats.Ssh.Lib do
 
   TODO: Ejemplos, doctests?
   """
-  @spec maildir_stats(conn :: pid(), dir :: String.t()) :: {:ok, %Maildir{}} | {:error, String.t()}
+  @spec maildir_stats(conn :: pid(), dir :: String.t()) ::
+          {:ok, %Maildir{}} | {:error, String.t()}
   def maildir_stats(conn, dir) do
     path = Path.join(@maildir_path, dir)
 

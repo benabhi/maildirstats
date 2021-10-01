@@ -47,5 +47,4 @@ defmodule Maildirstats.Ssh do
   def handle_call({:stats, account}, _from, %{conn: conn} = state) do
     {:reply, SSHLib.maildir_stats(conn, account), state}
   end
-
 end

@@ -8,10 +8,9 @@ defmodule Maildirstats.Mnesia do
 
   # Shorcuts
 
-  @doc false
   def find(account), do: DB.find(account)
-  @doc false
   def find_all(), do: DB.find_all()
-  @doc false
+  def save(record), do: DB.save(record)
+  def save_all(records), do: DB.save_all(records)
   def clear(), do: DB.clear()
 end
